@@ -1,7 +1,7 @@
 from flask import request, Blueprint, jsonify  
 from app.extensions import db 
 
-bebidas_api  = Blueprint ('bebidas_api', __name__)
+bebidas_api = Blueprint ('bebidas_api', __name__)
 
 @bebidas_api.route('/bebidas', methods = ['GET', 'POST'])
 def index():
