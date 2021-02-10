@@ -11,17 +11,23 @@ def index():
 
  
     if request.method == 'POST':
-        dados = request.json
+        data = request.json
 
-        suco = data.get('suco')
-        refrigerante = data.get ('refrigerante')
-        agua = data.get ('agua')
-        alcool = data.get ('alcool')
+        sucos = data.get('sucos')
+        refrigerantes = data.get('refrigerantes')
+        agua = data.get('agua')
+        alcool = data.get('alcool')
 
-        if not isinstance(suco, str) or not isinstance(refrigerante, str) or not isinstance(agua, str) or not isinstance(alcool, str):
+        print(refrigerantes)
+        print(sucos)
+        print(agua)
+        print(alcool)
+
+
+        if not isinstance(sucos, str) or not isinstance(refrigerantes, str) or not isinstance(agua, str) or not isinstance(alcool, str):
             return {"error" : "Algum tipo invalido"}, 400
 
-        bebidas = Bebidas (suco = suco, refrigerante =  refrigerante, agua = agua, alcool = alcool)
+        bebidas = Bebidas(sucos = sucos, refrigerantes =  refrigerantes, agua = agua, alcool = alcool)
 
         db.session.add(bebidas)
         db.session.commit()
@@ -36,19 +42,19 @@ def pagina_bebidas(id):
         return bebidas.json(), 200
 
     if request.method == 'PATCH':
-        dados = request.json
+        data = request.json
 
-        suco = data.get('suco', bebidas.suco)
-        refrigerante = data.get ('refrigerante', bebidas.refrigerante)
-        agua = data.get ('agua', bebidas.agua)
-        alcool = data.get ('alcool', bebidas.alcool)
+        sucos = data.get('sucos', bebidas.sucos)
+        refrigerantes = data.get('refrigerantes', bebidas.refrigerantes)
+        agua = data.get('agua', bebidas.agua)
+        alcool = data.get('alcool', bebidas.alcool)
 
-    if not isinstance(suco, str) or not isinstance(refrigerante, str) or not isinstance(agua, str) or not isinstance(alcool, str):
+    if not isinstance(sucos, str) or not isinstance(refrigerantes, str) or not isinstance(agua, str) or not isinstance(alcool, str):
             return {'error' : 'tipo errado'}, 400
 
         
-    bebidas.suco = suco
-    bebidas.refrigerante = refrigerante
+    bebidas.sucos = sucos
+    bebidas.refrigerantes = refrigerantes
     bebidas.agua = agua
     bebidas.alcool = alcool
 

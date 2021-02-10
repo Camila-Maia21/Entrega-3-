@@ -10,16 +10,16 @@ def index():
         return jsonify(cardapio.json() for cardapio in cardapio), 200
 
     if request.method == 'POST':
-        dados = request.json
+        data = request.json
 
         bebidas = data.get('bebidas')
-        petiscos = data.get ('petiscos')
-        doces = data.get ('doces')
+        petiscos = data.get('petiscos')
+        doces = data.get('doces')
 
         if not isinstance(bebidas, str) or not isinstance(petiscos, str) or not isinstance(doces, str):
             return {"error" : "Algum tipo invalido"}, 400
 
-        cardapio = Cardapio (bebidas = bebidas, pesticos =  pestiscos, doces = doces)
+        cardapio = Cardapio(bebidas = bebidas, pesticos =  pestiscos, doces = doces)
 
         db.session.add(cardapio)
         db.session.commit()
@@ -34,11 +34,11 @@ def pagina_cardapio(id):
         return cardapio.json(), 200
 
     if request.method == 'PATCH':
-        dados = request.json
+        data = request.json
 
         bebidas = data.get('bebidas', cardapio.bebidas)
-        petiscos = data.get ('petiscos', cardapio.pestiscos)
-        doces = data.get ('doces', cardapio.doces)
+        petiscos = data.get('petiscos', cardapio.pestiscos)
+        doces = data.get('doces', cardapio.doces)
 
         if not isinstance(bebidas, str) or not isinstance(petiscos, str) or not isinstance(doces, str):
             return {'error' : 'tipo errado'}, 400
