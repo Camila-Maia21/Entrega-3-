@@ -1,15 +1,16 @@
-from flask import request, Blueprint, jsonify  
+from flask import request, Blueprint, jsonify
+from flask.views import MethodView
+from app.cardapio.model import Cardapio 
 from app.extensions import db 
 
-cardapio_api  = Blueprint ('cardapio_api', __name__)
+#cardapio_api  = Blueprint ('cardapio_api', __name__)
 
-@cardapio_api.route('/cardapio', methods = ['GET', 'POST'])
-def index():
-    if request.method == 'GET':
+class CardapioDetails(MethodView): #cardapio
+    def get(self):
         cardapio = Cardapio.query.all()
         return jsonify(cardapio.json() for cardapio in cardapio), 200
 
-    if request.method == 'POST':
+    def post(self):
         data = request.json
 
         bebidas = data.get('bebidas')
@@ -26,14 +27,13 @@ def index():
 
         return cardapio.json(), 200
 
-@cardapio_api.route('/cardapio/<int:id>', methods = ['GET', 'PUT', 'PATCH', 'DELETE'])
-def pagina_cardapio(id):
-    cardapio = Cardapio.query.get_or_404(id)
-
-    if request.method == 'GET':
+class PaginaCardapio(MethodView): #/cardapio/<int:id>
+    def get(self, id): 
+        cardapio = Cardapio.query.get_or_404(id)
         return cardapio.json(), 200
 
-    if request.method == 'PATCH':
+    def patch(self, id):
+        cardapio = Cardapio.query.get_or_404(id)
         data = request.json
 
         bebidas = data.get('bebidas', cardapio.bebidas)
@@ -41,17 +41,10 @@ def pagina_cardapio(id):
         doces = data.get('doces', cardapio.doces)
 
         if not isinstance(bebidas, str) or not isinstance(petiscos, str) or not isinstance(doces, str):
-            return {'error' : 'tipo errado'}, 400
+            return {"error" : "Algum tipo invalido"}, 400
 
         cardapio.bebidas = bebidas
         cardapio.pestiscos = petiscos
         cardapio.doces = doces
 
         db.session.commit()
-
-
-
-
-
-
-

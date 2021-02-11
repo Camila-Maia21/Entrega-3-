@@ -1,15 +1,16 @@
-from flask import request, Blueprint, jsonify  
+from flask import request, Blueprint, jsonify 
+from flask.views import MethodView
+from app.sucos.model import Sucos 
 from app.extensions import db 
 
-sucos_api  = Blueprint ('sucos_api', __name__)
+#sucos_api  = Blueprint ('sucos_api', __name__)
 
-@sucos_api.route('/sucos', methods = ['GET', 'POST'])
-def index():
-    if request.method == 'GET':
+class SucosDetails(MethodView): #sucos
+    def get(self):
         sucos = Sucos.query.all()
         return jsonify(suco.json() for suco in sucos), 200
-
-    if request.method == 'POST':
+    
+    def post(self): 
         data = request.json
 
         abacaxi_hortela = data.get('abacaxi_hortela')
@@ -27,14 +28,13 @@ def index():
 
         return sucos.json(), 200
 
-@sucos_api.route('/sucos/<int:id>', methods = ['GET', 'PUT', 'PATCH', 'DELETE'])
-def pagina_sucos(id):
-    sucos = Sucos.query.get_or_404(id)
+class PaginaSucos(MethodView):
+    def get(self, id):
+        sucos = Sucos.query.all()
+        return jsonify(suco.json() for suco in sucos), 200
 
-    if request.method == 'GET':
-        return sucos.json(), 200
-
-    if request.method == 'PATCH':
+    def patch(self, id):
+        sucos = Sucos.query.all()
         data = request.json
 
         abacaxi_hortela = data.get('abacaxi_hortela', cardapio.abacaxi_hortela)
@@ -53,8 +53,3 @@ def pagina_sucos(id):
         cardapio.laranja = laranja
 
         db.session.commit()
-
-
-        
-
-

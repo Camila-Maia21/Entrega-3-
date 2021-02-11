@@ -1,16 +1,16 @@
 from flask import request, Blueprint, jsonify  
+from flask.views import MethodView
+from app.bebidas.model import Bebidas
 from app.extensions import db 
 
-bebidas_api = Blueprint ('bebidas_api', __name__)
+#bebidas_api = Blueprint ('bebidas_api', __name__)
 
-@bebidas_api.route('/bebidas', methods = ['GET', 'POST'])
-def index():
-    if request.method == 'GET':
+class BebidasDetails(MethodView): #bebidas
+    def get(self):
         bebidas = Bebidas.query.all()
         return jsonify(bebida.json() for bebida in bebidas), 200
 
- 
-    if request.method == 'POST':
+    def post(self):
         data = request.json
 
         sucos = data.get('sucos')
@@ -23,7 +23,6 @@ def index():
         print(agua)
         print(alcool)
 
-
         if not isinstance(sucos, str) or not isinstance(refrigerantes, str) or not isinstance(agua, str) or not isinstance(alcool, str):
             return {"error" : "Algum tipo invalido"}, 400
 
@@ -34,14 +33,13 @@ def index():
 
         return bebidas.json(), 200
 
-@bebidas_api.route('/bebidas/<int:id>', methods = ['GET', 'PUT', 'PATCH', 'DELETE'])
-def pagina_bebidas(id):
-    bebidas = Bebidas.query.get_or_404(id)
-
-    if request.method == 'GET':
+class PaginaBebidas(MethodView): #/bebidas/<int:id>
+    def get(self, id):
+        bebidas = Bebidas.query.get_or_404(id)
         return bebidas.json(), 200
 
-    if request.method == 'PATCH':
+    def patch(self, id): 
+        bebidas = Bebidas.query.get_or_404(id)
         data = request.json
 
         sucos = data.get('sucos', bebidas.sucos)
@@ -49,16 +47,13 @@ def pagina_bebidas(id):
         agua = data.get('agua', bebidas.agua)
         alcool = data.get('alcool', bebidas.alcool)
 
-    if not isinstance(sucos, str) or not isinstance(refrigerantes, str) or not isinstance(agua, str) or not isinstance(alcool, str):
-            return {'error' : 'tipo errado'}, 400
+        if not isinstance(sucos, str) or not isinstance(refrigerantes, str) or not isinstance(agua, str) or not isinstance(alcool, str):
+            return {"error" : "Algum tipo invalido"}, 400
 
         
-    bebidas.sucos = sucos
-    bebidas.refrigerantes = refrigerantes
-    bebidas.agua = agua
-    bebidas.alcool = alcool
+        bebidas.sucos = sucos
+        bebidas.refrigerantes = refrigerantes
+        bebidas.agua = agua
+        bebidas.alcool = alcool
 
-    db.session.commit()
-
-
-   
+        db.session.commit()  
