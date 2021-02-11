@@ -3,7 +3,6 @@ from flask.views import MethodView
 from app.sucos.model import Sucos 
 from app.extensions import db 
 
-#sucos_api  = Blueprint ('sucos_api', __name__)
 
 class SucosDetails(MethodView): #sucos
     def get(self):

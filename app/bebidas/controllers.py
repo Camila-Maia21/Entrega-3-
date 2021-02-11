@@ -3,7 +3,6 @@ from flask.views import MethodView
 from app.bebidas.model import Bebidas
 from app.extensions import db 
 
-#bebidas_api = Blueprint ('bebidas_api', __name__)
 
 class BebidasDetails(MethodView): #bebidas
     def get(self):

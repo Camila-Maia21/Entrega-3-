@@ -3,7 +3,6 @@ from flask.views import MethodView
 from app.cardapio.model import Cardapio 
 from app.extensions import db 
 
-#cardapio_api  = Blueprint ('cardapio_api', __name__)
 
 class CardapioDetails(MethodView): #cardapio
     def get(self):

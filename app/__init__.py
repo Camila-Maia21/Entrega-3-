@@ -1,6 +1,6 @@
 from flask import Flask
 from .config import Config
-from .extensions import db, migrate, mail
+from .extensions import db, migrate, mail, jwt
 
 from .bebidas.model import Bebidas
 from .cardapio.model import Cardapio
@@ -21,6 +21,7 @@ def create_app():
     db.init_app(app)
     migrate.init_app(app,db)
     mail.init_app(app)
+    jwt.init_app(app)
 
     app.register_blueprint(bebidas_api)
     app.register_blueprint(cardapio_api)
