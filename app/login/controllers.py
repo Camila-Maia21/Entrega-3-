@@ -34,7 +34,7 @@ class LoginDetails(MethodView): #login
         msg = Message(sender='camilamaia@poli.ufrj.br',
                       recipients=[email],
                       subject='Bem-vindo!',
-                      html=render_template('email.html', nome= nome))
+                      html=render_template('email1.html', nome= nome))
 
         mail.send(msg)
 

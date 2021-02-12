@@ -17,10 +17,6 @@ class BebidasDetails(MethodView): #bebidas
         agua = data.get('agua')
         alcool = data.get('alcool')
 
-        print(refrigerantes)
-        print(sucos)
-        print(agua)
-        print(alcool)
 
         if not isinstance(sucos, str) or not isinstance(refrigerantes, str) or not isinstance(agua, str) or not isinstance(alcool, str):
             return {"error" : "Algum tipo invalido"}, 400
