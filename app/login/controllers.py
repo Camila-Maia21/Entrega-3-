@@ -4,7 +4,7 @@ from app.login.model import Login
 from app.extensions import db, mail 
 import bcrypt
 from flask_mail import Message
-from flask_jwt_extended import create_acess_token, jwt_required, get_jwt_identity
+from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 
 
 class LoginDetails(MethodView): #login
@@ -30,10 +30,10 @@ class LoginDetails(MethodView): #login
         db.session.add(login)
         db.session.commit()
 
-        msg = Message (sender= 'camilamaia@poli.ufrj.br'
-                       recipients= [email],
-                       subject= 'Bem-vindo!'
-                       html= render_template('email.html', nome= nome))
+        msg = Message (sender='camilamaia@poli.ufrj.br',
+                       recipients=[email],
+                       subject='Bem-vindo!',
+                       html=render_template('email.html', nome= nome))
 
         mail.send(msg)
 
@@ -44,14 +44,14 @@ class PaginaLogin(MethodView): #/login/<int:id>
     decorators = [jwt_required]
 
     def get(self, id):
-        if get_jwt_identity() ! = id:
+        if get_jwt_identity() != id:
             return {"error": "Usuario não permitido"}, 400
         login = Login.query.get_or_404(id)
         return login.json(), 200
 
 
     def patch(self, id):
-        if get_jwt_identity() ! = id:
+        if get_jwt_identity() != id:
             return {"error": "Usuario não permitido"}, 400
         login = Login.query.get_or_404(id)
         data = request.json
@@ -84,9 +84,9 @@ class UsuarioLogin(MethodView): #usuariologin
             return{"error": "Usuario não encontrado"}, 400
 
 
-        token = create_acess_token(identify=login.id)
-
-        return ("token": token), 200
+        token = create_access_token(identity=login.id)
+        
+        return {"token": token}, 200
 
 
 
