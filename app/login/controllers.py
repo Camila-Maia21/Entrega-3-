@@ -20,20 +20,21 @@ class LoginDetails(MethodView): #login
         email = data.get('email')
         senha = str(data.get('senha'))
 
+
         if not isinstance(nome, str) or not isinstance(email, str) or not isinstance(senha, str):
             return {"error" : "Algum tipo invalido"}, 400
 
-        senha_hash = bcrypt.hashpw(senha.encode(), bcrypt.genslat())
+        senha_hash = bcrypt.hashpw(senha.encode(), bcrypt.gensalt())
 
-        login = Login(nome = nome, email =  email, senha_hash = senha_hash)
+        login = Login(nome = nome, email = email, senha_hash = senha_hash)
 
         db.session.add(login)
         db.session.commit()
 
-        msg = Message (sender='camilamaia@poli.ufrj.br',
-                       recipients=[email],
-                       subject='Bem-vindo!',
-                       html=render_template('email.html', nome= nome))
+        msg = Message(sender='camilamaia@poli.ufrj.br',
+                      recipients=[email],
+                      subject='Bem-vindo!',
+                      html=render_template('email.html', nome= nome))
 
         mail.send(msg)
 
@@ -64,9 +65,9 @@ class PaginaLogin(MethodView): #/login/<int:id>
             return {"error" : "Algum tipo invalido"}, 400
 
         
-        login.nome = nome
-        login.email = email
-        login.senha = senha
+        login.nome= nome
+        login.email= email
+        login.senha= senha
 
         db.session.commit()
 
